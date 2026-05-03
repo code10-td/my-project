@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Electrician</title>
+
+<style>
+.header{background:  linear-gradient(135deg,#0f2027,#203a43,#2c5364); color: white; padding:10px;}
+body{font-family:Calibri;text-align:center;background:#f5f5f5}
+button{padding:8px;margin:5px}
+.card{background:rgb(101, 134, 171);margin:10px;padding:10px;border-radius:8px}
+input{padding:6px;margin:5px}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+<h2>⚡ Electrician List</h2>
+</div>
+
+<!-- 🔽 FORM -->
+<form onsubmit="add(event)">
+<input type="text" id="name" placeholder="Name" required>
+<input type="text" id="phone" placeholder="Phone" required>
+<input type="text" id="district" placeholder="District" required>
+
+<button type="submit">➕ Add Electrician</button>
+</form>
+
+<div id="list"></div>
+<script>
+
+let data = JSON.parse(localStorage.getItem("electricians")) || [];
+show();
+
+function add(e){
+e.preventDefault();
+
+let name = document.getElementById("name").value;
+let phone = document.getElementById("phone").value;
+let district = document.getElementById("district").value;
+
+data.push({n:name,p:phone,d:district});
+
+// SAVE
+localStorage.setItem("electricians", JSON.stringify(data));
+
+show();
+
+// clear
+document.getElementById("name").value="";
+document.getElementById("phone").value="";
+document.getElementById("district").value="";
+}
+
+function show(){
+let list = document.getElementById("list");
+list.innerHTML = "";
+
+for(let i=0;i<data.length;i++){
+list.innerHTML += `
+<div class="card">
+<b>Name:</b> ${data[i].n}<br>
+<b>Phone:</b> ${data[i].p}<br>
+<b>District:</b> ${data[i].d}
+</div>`;
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+        <header>
+                <title>home page</title>
+                <style>
+                        body{
+    background:#f8fafc; /* clean white background */
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); /* deep professional blue */
+    padding: 12px;
+    color: white;
+}
+.container{ display: grid;padding: 30px 20px; gap:5px; grid-template-columns: repeat(3,1fr);}
+.card{
+    background:white;
+    padding:25px;
+    text-align:center;
+    border-radius:12px;
+    font-size:18px;
+    text-decoration:none;
+    color:#1f2937;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px); /* scale er cheye eta beshi pro */
+    background:#dff9fb;
+}
+
+.contact{
+    background:#0f2240;; /* button blue */
+    padding:10px 300px;
+    color:white;
+    text-align:center;
+    display:inline-block;
+    text-decoration:none;
+    border-radius:8px;
+}
+
+
+
+                </style>
+        </header>
+        <body>
+                <div class="header"><h2>Home service</h2></div>
+                <div class="container">
+                <a href="el.html" class="card"> electrician</a>
+                <a href="el.html" class="card"> plumber</a>
+                <a href="el.html" class="card"> carpenter</a></div>
+                <div > 
+                <a href="contact.php "class="contact"><h4>contact us</h4></a></div>
+        </body>
+</html>
