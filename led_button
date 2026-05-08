@@ -1,0 +1,17 @@
+void main() {
+    TRISB = 0x00;
+    TRISC = 0xFF;
+    PORTB = 0x00;
+
+    while(1) {
+        if (PORTC.F0 == 1) {
+            Delay_ms(100);
+
+            if (PORTC.F0 == 1) {
+                PORTB.F0 = ~PORTB.F0;
+                PORTB.F1 = ~PORTB.F1;
+                while(PORTC.F0 == 1);
+            }
+        }
+    }
+}
