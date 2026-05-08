@@ -1,0 +1,53 @@
+LM016L,LM35
+
+sbit LCD_RS at RB4_bit;
+sbit LCD_EN at RB5_bit;
+sbit LCD_D4 at RB0_bit;
+sbit LCD_D5 at RB1_bit;
+sbit LCD_D6 at RB2_bit;
+sbit LCD_D7 at RB3_bit;
+sbit LCD_RS_Direction at TRISB4_bit;
+sbit LCD_EN_Direction at TRISB5_bit;
+sbit LCD_D4_Direction at TRISB0_bit;
+sbit LCD_D5_Direction at TRISB1_bit;
+sbit LCD_D6_Direction at TRISB2_bit;
+sbit LCD_D7_Direction at TRISB3_bit;
+float temp_val;
+int temp;
+char temper[7];
+void READ_temp(void)
+{
+    temp_val = ADC_Read(0);
+    temp_val = temp_val * 0.48828125; // (500/1024)
+    temp = (int)temp_val;
+}
+void data_conversion(void)
+{
+    IntToStr(temp, temper);
+}
+void display_temperature(void)
+{
+    Lcd_Out(2, 1, "TEMP = ");
+    Lcd_Out(2, 8, Ltrim(temper));
+    Lcd_Chr_Cp(0xdf); // Degree symbol
+    Lcd_Chr_Cp('C');
+    Lcd_Chr_Cp(' ');
+}
+void main()
+{
+    ADCON1 = 0x00;
+    TRISA = 0xFF;
+    ADC_Init();
+    Lcd_Init();
+    Lcd_Cmd(_LCD_CLEAR);
+    Lcd_Cmd(_LCD_CURSOR_OFF);
+    Lcd_Out(1, 1, "DIGITAL THERMO");
+    delay_ms(1000);
+    while(1)
+    {
+        READ_temp();
+        data_conversion();
+        display_temperature();
+        delay_ms(500);
+    }
+}
