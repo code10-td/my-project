@@ -1,0 +1,50 @@
+MOTOR-PWMS......
+
+
+
+
+
+int i;
+
+void main() {
+    TRISB.F0 = 0;   // RB0 as output
+    PORTB.F0 = 0;
+
+    while(1){
+        // LEFT 90 degree
+        for(i=0; i<50; i++){
+            PORTB.F0 = 1;
+            Delay_us(1000);   // 1 ms pulse
+            PORTB.F0 = 0;
+            Delay_us(19000);  // remainder of 20 ms
+        }
+        Delay_ms(500);
+
+        // STOP
+        for(i=0; i<50; i++){
+            PORTB.F0 = 1;
+            Delay_us(1500);  // 1.5 ms pulse
+            PORTB.F0 = 0;
+            Delay_us(18500);
+        }
+        Delay_ms(500);
+
+        // RIGHT 90 degree
+        for(i=0; i<50; i++){
+            PORTB.F0 = 1;
+            Delay_us(2000);  // 2 ms pulse
+            PORTB.F0 = 0;
+            Delay_us(18000);
+        }
+        Delay_ms(500);
+
+       // STOP
+        for(i=0; i<50; i++){
+            PORTB.F0 = 1;
+            Delay_us(1500);  // 1.5 ms pulse
+            PORTB.F0 = 0;
+            Delay_us(18500);
+        }
+        Delay_ms(500);
+    }
+}
