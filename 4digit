@@ -1,0 +1,70 @@
+unsigned char num[] = {
+   0xC0, //0
+   0xF9, //1
+   0xA4, //2
+   0xB0, //3
+   0x99, //4
+   0x92, //5
+   0x82, //6
+   0xF8, //7
+   0x80, //8
+   0x90  //9
+};
+
+int d1,d2,d3,d4;
+int value;
+
+// Display one number continuously for some time
+void displayNumber(int val, int time_ms){
+
+   int i;
+
+   d1 = val / 1000;
+   d2 = (val / 100) % 10;
+   d3 = (val / 10) % 10;
+   d4 = val % 10;
+
+   for(i=0; i<time_ms/8; i++){
+
+      // Digit 1
+      PORTB = num[d1];
+      PORTC = 0x01;
+      Delay_ms(2);
+      PORTC = 0x00;
+
+      // Digit 2
+      PORTB = num[d2];
+      PORTC = 0x02;
+      Delay_ms(2);
+      PORTC = 0x00;
+
+      // Digit 3
+      PORTB = num[d3];
+      PORTC = 0x04;
+      Delay_ms(2);
+      PORTC = 0x00;
+
+      // Digit 4
+      PORTB = num[d4];
+      PORTC = 0x08;
+      Delay_ms(2);
+      PORTC = 0x00;
+   }
+}
+
+void main() {
+
+   TRISB = 0x00;   // PORTB output for segments
+   TRISC = 0x00;   // PORTC output for digit select
+
+   PORTB = 0xFF;
+   PORTC = 0x00;
+
+   while(1){
+
+      for(value = 7123; value <= 7298; value++){
+
+         displayNumber(value,100); // 1 second display
+      }
+   }
+}
