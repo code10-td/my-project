@@ -1,0 +1,23 @@
+bc547bp,7seg-mpx2-cc
+
+
+char arr[] = { 0x3F, 0x06, 0x5B,  0x4F, 0x66,  0x6D, 0x7D, 0x07,  0x7F, 0x6F};
+    int i=0;
+void main() {
+       int left_digit, right_digit,j;
+       TRISB = TRISD = 0x00;
+       portb = portd = 0x00;
+       while(1){
+       for(i=0; i<100;i++){      //count 99
+       left_digit = i / 10;
+       right_digit = i % 10;
+       for(j=0;j<30; j++){
+        portd.f0 = 0x00;
+        portb = arr[left_digit];
+        delay_ms(10);
+        portd.f0=1;
+        portd.f1 = 0x00;
+        portb = arr[right_digit];
+        delay_ms(10);
+        portd.f1=1;     }         }       }
+}
