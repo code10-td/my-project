@@ -1,0 +1,26 @@
+void main() {
+
+    TRISB = 0x00;     // PORTB as output
+    PORTB = 0x00;     // ?? LED OFF
+
+    while(1) {
+
+        // LED 1 ON
+        PORTB.F0 = 1;
+        PORTB.F1 = 0;
+        PORTB.F2 = 0;
+        Delay_ms(1000);
+
+        // LED 2 ON
+        PORTB.F0 = 0;
+        PORTB.F1 = 1;
+        PORTB.F2 = 0;
+        Delay_ms(1000);
+
+        // LED 3 ON
+        PORTB.F0 = 0;
+        PORTB.F1 = 0;
+        PORTB.F2 = 1;
+        Delay_ms(1000);
+    }
+}
