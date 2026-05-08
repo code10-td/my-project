@@ -1,0 +1,17 @@
+aparatus:
+led,crystal,res,cap,pic
+
+void main() {
+PORTB=0x00 ; // set portb as output
+PORTB=0x00 ; //initialize portb as off
+while (1)
+{
+PORTB.f=1;
+delay_ms(100);
+PORTB.f=0;
+delay_ms(100);
+
+
+}  }
+
+
