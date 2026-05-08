@@ -1,0 +1,142 @@
+//==================================================
+// 2-Digit Stopwatch using 7 Segment Display
+// Start Button  -> RD0
+// Stop Button   -> RD1
+// Reset Button  -> RD2
+//
+// PORTB -> Segment Data
+// RC0 -> Left Digit Enable
+// RC1 -> Right Digit Enable
+//==================================================
+
+// Common Anode 7 Segment Codes
+char arr[] = {
+   0x40, //0
+   0x79, //1
+   0x24, //2
+   0x30, //3
+   0x19, //4
+   0x12, //5
+   0x02, //6
+   0x78, //7
+   0x00, //8
+   0x10  //9
+};
+int i;
+int count = 0;
+int left, right;
+int run = 0;     // 0 = Stop , 1 = Start
+
+//====================================
+// Display Function
+//====================================
+void display() {
+
+   left  = count / 10;
+   right = count % 10;
+
+   // Left Digit
+   PORTC.F0 = 1;
+   PORTB = arr[left];
+   Delay_ms(5);
+   PORTC.F0 = 0;
+
+   // Right Digit
+   PORTC.F1 = 1;
+   PORTB = arr[right];
+   Delay_ms(5);
+   PORTC.F1 = 0;
+}
+
+//====================================
+// Main Function
+//====================================
+void main() {
+
+   TRISB = 0x00;   // PORTB Output
+   TRISC = 0x00;   // PORTC Output
+   TRISD = 0xFF;   // PORTD Input
+
+   PORTB = 0x00;
+   PORTC = 0x00;
+   PORTD = 0x00;
+
+   while(1) {
+
+      //================ START BUTTON ================
+      if(PORTD.F0 == 1) {
+         Delay_ms(30);
+
+         if(PORTD.F0 == 1) {
+            run = 1;
+
+            while(PORTD.F0 == 1);
+         }
+      }
+
+      //================ STOP BUTTON =================
+      if(PORTD.F1 == 1) {
+         Delay_ms(30);
+
+         if(PORTD.F1 == 1) {
+            run = 0;
+
+            while(PORTD.F1 == 1);
+         }
+      }
+
+      //================ RESET BUTTON ================
+      if(PORTD.F2 == 1) {
+         Delay_ms(30);
+
+         if(PORTD.F2 == 1) {
+            count = 0;
+
+            while(PORTD.F2 == 1);
+         }
+      }
+
+      //================ COUNTING ====================
+      if(run == 1) {
+
+         count++;
+
+         if(count == 100)
+            count = 0;
+
+         // Display for 1 second
+         // (100 × 10ms ˜ 1 sec)
+         for( i = 0; i < 100; i++) {
+
+            display();
+
+            // Stop button check during running
+            if(PORTD.F1 == 1) {
+               Delay_ms(30);
+
+               if(PORTD.F1 == 1) {
+                  run = 0;
+
+                  while(PORTD.F1 == 1);
+               }
+            }
+
+            // Reset button check during running
+            if(PORTD.F2 == 1) {
+               Delay_ms(30);
+
+               if(PORTD.F2 == 1) {
+                  count = 0;
+
+                  while(PORTD.F2 == 1);
+               }
+            }
+         }
+      }
+
+      // Show display continuously when stopped
+      else {
+         display();
+      }
+   }
+}
