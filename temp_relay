@@ -1,3 +1,6 @@
+L293D,LM016L,LM35,motordc,pot
+
+
 sbit LCD_RS at RB0_bit;
 sbit LCD_EN at RB1_bit;
 sbit LCD_D4 at RB2_bit;
