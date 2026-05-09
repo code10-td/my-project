@@ -1,27 +1,21 @@
 POT-HG,VIRTUAL TERMINAL,VOLT-METER
 
 unsigned int adc_value;
-char txt[7];
+char txt [7];
 
-void main() {
+void main(){
+TRISA=0XFF;
+TRISC=0X80;
+UART1_init(9600);
+delay_ms(1000);
 
-    ADCON1 = 0x80;        // AN0 analog
-    TRISA = 0xFF;         // PORTA input (AN0 input)
-    TRISC = 0x80;         // RC7 input, RC6 output
-
-    UART1_Init(9600);     // UART 9600 baud
-    Delay_ms(100);
-
-    while(1)
-    {
-        adc_value = ADC_Read(0);
-
-        IntToStr(adc_value, txt);  // Integer ? String
-
-        UART1_Write_Text("ADC Value = ");
-        UART1_Write_Text(txt);
-        UART1_Write("\n");   // New line
-
-        Delay_ms(500);
-    }
+while(1){
+ adc_value=ADC_READ(0);
+ inttostr(adc_value,txt);
+ UART1_Write_Text("ADC VALUE:");
+ UART1_Write_Text(txt);
+ UART1_Write_Text("\r\n");
+ delay_ms(1000);
+ 
+ }
 }
