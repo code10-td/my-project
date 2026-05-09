@@ -1,0 +1,49 @@
+void main() {
+
+    int state = 0;   // 0=stop, 1=forward, 2=reverse
+
+    // Motor control pins
+    TRISB = 0x00;
+    PORTB = 0x00;
+
+    // Button pins
+    TRISD.F0 = 1;
+    TRISD.F1 = 1;
+    TRISD.F2 = 1;
+
+    while(1) {
+
+        // Button press detect (just change state)
+        if(PORTD.F0 == 1) {
+            state = 1;   // Forward
+            while(PORTD.F0 == 1);  // wait release
+        }
+
+        if(PORTD.F1 == 1) {
+            state = 2;   // Reverse
+            while(PORTD.F1 == 1);
+        }
+
+        if(PORTD.F2 == 1) {
+            state = 0;   // Stop
+            while(PORTD.F2 == 1);
+        }
+
+        // Apply state to motor
+        if(state == 1) {
+            PORTB.F2 = 1;
+            PORTB.F0 = 1;
+            PORTB.F1 = 0;
+        }
+        else if(state == 2) {
+            PORTB.F2 = 1;
+            PORTB.F0 = 0;
+            PORTB.F1 = 1;
+        }
+        else {
+            PORTB.F2 = 0;
+            PORTB.F0 = 0;
+            PORTB.F1 = 0;
+        }
+    }
+}
