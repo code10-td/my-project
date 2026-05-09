@@ -1,4 +1,4 @@
-LM017L,POT-HG
+LM016L,POT-HG
 
 sbit LCD_RS at RB0_bit;
 sbit LCD_EN at RB1_bit;
