@@ -1,0 +1,102 @@
+#define digitL PORTC.F0
+#define digitR PORTC.F1
+
+// Common Anode 7-segment patterns (0-9)
+unsigned char arrayca[] = { 0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90 };
+
+void main() {
+    int j;
+    int m = 0;
+    int Left_digit = 0, Right_digit = 0;
+    int bt_zero = 0, bt_one = 0;
+
+    int fromIndex = 0;
+    int toIndex = 0;
+    int confirmStep = 0;   // 0 = From set, 1 = To set, 2 = Counting
+
+    TRISB = 0x00; // segments output
+    TRISC = 0x00; // digit control output
+    TRISD.F0 = 1; // Tens button
+    TRISD.F1 = 1; // Units button
+    TRISD.F7 = 1; // Confirm button
+
+    PORTB = 0xFF; // Initially all segments OFF for CA
+    PORTC = 0x00;
+
+    while (1) {
+        // --- ?. ???? ????? ???? (????????? ?????? ???? ??? ????) ---
+        if (confirmStep < 2) {
+            // Tens Button (RD0)
+            if (PORTD.F0 == 1) {
+                Delay_ms(20); // Debounce
+                if (PORTD.F0 == 1) {
+                    bt_zero++;
+                    if (bt_zero > 9) bt_zero = 0;
+                    while(PORTD.F0 == 1); // ???? ???? ?? ????? ??????? ???????
+                }
+            }
+            // Units Button (RD1)
+            if (PORTD.F1 == 1) {
+                Delay_ms(20);
+                if (PORTD.F1 == 1) {
+                    bt_one++;
+                    if (bt_one > 9) bt_one = 0;
+                    while(PORTD.F1 == 1);
+                }
+            }
+        }
+
+        // --- ?. ??????? ???? ???? (RD7) ---
+        if (PORTD.F7 == 1) {
+            Delay_ms(20);
+            if (PORTD.F7 == 1) {
+                if (confirmStep == 0) {
+                    fromIndex = (bt_zero * 10) + bt_one;
+                    confirmStep = 1;
+                    // ????? ????????? ?? ??? ????? ???? 'To' ??? ??? ??? ??
+                    bt_zero = 0;
+                    bt_one = 0;
+                }
+                else if (confirmStep == 1) {
+                    toIndex = (bt_zero * 10) + bt_one;
+                    m = fromIndex; // ???????? ???? ??? fromIndex ????
+                    confirmStep = 2;
+                }
+                while(PORTD.F7 == 1); // ???? ???? ????? ??????? ???????
+            }
+        }
+
+        // --- ?. ??????? ???? ---
+        if (confirmStep == 2) {
+            // ???????? ??? (???????? ?????)
+            Left_digit = m / 10;
+            Right_digit = m % 10;
+
+            for (j = 0; j < 50; j++) { // ???????? ?????? ???????? ?????
+                PORTB = arrayca[Left_digit];
+                digitL = 1; digitR = 0;
+                Delay_ms(5);
+                digitL = 0;
+
+                PORTB = arrayca[Right_digit];
+                digitR = 1; digitL = 0;
+                Delay_ms(5);
+                digitR = 0;
+            }
+            m++;
+            if (m > toIndex) m = fromIndex; // ??? ?????
+        }
+        else {
+            // ?????? ??? (???? ????? ??????? ????? ???)
+            PORTB = arrayca[bt_zero];
+            digitL = 1; digitR = 0;
+            Delay_ms(5);
+            digitL = 0;
+
+            PORTB = arrayca[bt_one];
+            digitR = 1; digitL = 0;
+            Delay_ms(5);
+            digitR = 0;
+        }
+    }
+}
